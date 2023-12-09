@@ -57,7 +57,8 @@
         "stack": "cpp",
         "deque": "cpp",
         "queue": "cpp",
-        "hash_set": "cpp"
+        "hash_set": "cpp",
+        "format": "cpp"
     },
     "C_Cpp.errorSquiggles": "Enabled",
     "sqltools.connections": [
