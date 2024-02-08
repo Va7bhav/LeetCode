@@ -44,6 +44,32 @@ public:
     }
 };
 
+class Solution3 {
+    int mod = 1e9 + 7;
+public:
+    int help(int idx, int members, int pro, int n, int minProfit, vector<int> &group, vector<int> &profit,
+    vector<vector<vector<int>>>& dp)
+    {
+        if (idx == group.size())
+            return pro >= minProfit;
+
+        if (dp[idx][members][pro] != -1)
+            return dp[idx][members][pro];
+
+        int take = 0;
+        if (members + group[idx] <= n)
+            take = help(idx + 1, members + group[idx], min(minProfit, pro + profit[idx]), n, minProfit, group, profit, dp);
+
+        int nottake = help(idx + 1, members, pro, n, minProfit, group, profit, dp);
+        return dp[idx][members][pro] = (take + nottake) % mod;
+    }
+    int profitableSchemes(int n, int minProfit, vector<int> &group, vector<int> &profit)
+    {
+        vector<vector<vector<int>>> dp (101, vector<vector<int>> (101, vector<int> (101, -1)));
+        return help(0, 0, 0, n, minProfit, group, profit, dp);
+    }
+};
+
 
 int main()
 {

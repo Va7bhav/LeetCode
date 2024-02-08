@@ -1,5 +1,8 @@
 #include<iostream>
+#include<bits/stdc++.h>
 using namespace std;
+typedef long long ll;
+int MOD = 1e9 + 7;
 
 struct TreeNode {
     int val;
@@ -9,37 +12,43 @@ struct TreeNode {
     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
-class Node {
+
+
+struct Node {
     public:
-    int max;
-    int min;
+    bool isBST;
     int total;
-    Node (int _max, int _min, int _total) {
-        max = _max;
-        min = _min;
+    
+    Node(bool is, int _total) {
+        isBST = is;
         total = _total;
     }
 };
-
 class Solution {
-    Node f(TreeNode* root) {
-        if (!root->left && !root->right) {
-            return Node(root->val, root->val, root->val);
+    int res = -1e5;
+    Node* f(TreeNode* root) {
+        if (root == NULL) {
+            return new Node(true, 0);
         }
-        
-        if ((root->val > f(root->left).max) && 
-            (root->val < f(root->right).min)) {
-            return Node(max(root->val, f(root->right).max), 
-                        min(root->val, f(root->left).min), 
-                        f(root->left).total + f(root->right).total + root->val)
+        Node* leftNode = f(root->left);
+        Node* rightNode = f(root->right);
+
+        if (root->val < root->left->val || root->val < root->right->val) {
+            return new Node(false, -1e5);
+        }
+        if (leftNode->isBST && rightNode->isBST) {
+            res = max(res, root->val + leftNode->total + rightNode->total);
+            return new Node(true, root->val + leftNode->total + rightNode->total);
+        } else {
+            return new Node(false, -1e5);
         }
     }
 public:
     int maxSumBST(TreeNode* root) {
-        return f(root).total;
+        f(root);
+        return res;
     }
 };
-
 
 int main() {
     
